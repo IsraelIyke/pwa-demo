@@ -14,7 +14,6 @@ export default function Home(): JSX.Element {
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
   useEffect(() => {
-    // Handle before install prompt
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent): void => {
       e.preventDefault();
       setPwaData({
@@ -23,7 +22,6 @@ export default function Home(): JSX.Element {
       });
     };
 
-    // Handle app installed event
     const handleAppInstalled = (): void => {
       setPwaData((prev) => ({
         ...prev,
@@ -31,11 +29,9 @@ export default function Home(): JSX.Element {
       }));
     };
 
-    // Handle online/offline status
     const handleOnline = (): void => setIsOnline(true);
     const handleOffline = (): void => setIsOnline(false);
 
-    // Add event listeners
     window.addEventListener(
       "beforeinstallprompt",
       handleBeforeInstallPrompt as EventListener
@@ -44,11 +40,9 @@ export default function Home(): JSX.Element {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Set initial online status
     setIsOnline(navigator.onLine);
 
     return (): void => {
-      // Cleanup event listeners
       window.removeEventListener(
         "beforeinstallprompt",
         handleBeforeInstallPrompt as EventListener
