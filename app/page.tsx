@@ -92,18 +92,6 @@ export default function Home(): JSX.Element {
         {/* Counter Component */}
         <Counter initialCount={0} />
 
-        {/* Features List */}
-        <div style={styles.features}>
-          <h2 style={styles.featuresTitle}>PWA Features:</h2>
-          <ul style={styles.featureList}>
-            <li style={styles.featureItem}>✓ Installable on devices</li>
-            <li style={styles.featureItem}>✓ Works offline</li>
-            <li style={styles.featureItem}>✓ Responsive design</li>
-            <li style={styles.featureItem}>✓ Fast loading</li>
-            <li style={styles.featureItem}>✓ TypeScript powered</li>
-          </ul>
-        </div>
-
         {/* Install Prompt */}
         {pwaData.isInstallable && (
           <div style={styles.installSection}>
@@ -119,25 +107,6 @@ export default function Home(): JSX.Element {
             </p>
           </div>
         )}
-
-        {/* App Info */}
-        <div style={styles.info}>
-          <h3>App Information</h3>
-          <div style={styles.infoGrid}>
-            <div style={styles.infoItem}>
-              <strong>Version:</strong> 1.0.0
-            </div>
-            <div style={styles.infoItem}>
-              <strong>Built with:</strong> Next.js + TypeScript
-            </div>
-            <div style={styles.infoItem}>
-              <strong>Storage:</strong>{" "}
-              {typeof navigator.storage !== "undefined"
-                ? "Available"
-                : "Not Available"}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Install Prompt Banner */}
