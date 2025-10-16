@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSX } from "react";
 import { BeforeInstallPromptEvent, PWAData, StyleProps } from "@/types/pwa";
 import SWRegister from "./components/SWRegister";
 import InstallPrompt from "./components/InstallPrompt";
@@ -14,6 +14,7 @@ export default function Home(): JSX.Element {
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
   useEffect(() => {
+    // Handle before install prompt
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent): void => {
       e.preventDefault();
       setPwaData({
@@ -22,6 +23,7 @@ export default function Home(): JSX.Element {
       });
     };
 
+    // Handle app installed event
     const handleAppInstalled = (): void => {
       setPwaData((prev) => ({
         ...prev,
@@ -29,20 +31,27 @@ export default function Home(): JSX.Element {
       }));
     };
 
+    // Handle online/offline status
     const handleOnline = (): void => setIsOnline(true);
     const handleOffline = (): void => setIsOnline(false);
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    // Add event listeners
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt as EventListener
+    );
     window.addEventListener("appinstalled", handleAppInstalled);
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
+    // Set initial online status
     setIsOnline(navigator.onLine);
 
     return (): void => {
+      // Cleanup event listeners
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt
+        handleBeforeInstallPrompt as EventListener
       );
       window.removeEventListener("appinstalled", handleAppInstalled);
       window.removeEventListener("online", handleOnline);
@@ -89,6 +98,18 @@ export default function Home(): JSX.Element {
         {/* Counter Component */}
         <Counter initialCount={0} />
 
+        {/* Features List */}
+        <div style={styles.features}>
+          <h2 style={styles.featuresTitle}>PWA Features:</h2>
+          <ul style={styles.featureList}>
+            <li style={styles.featureItem}>✓ Installable on devices</li>
+            <li style={styles.featureItem}>✓ Works offline</li>
+            <li style={styles.featureItem}>✓ Responsive design</li>
+            <li style={styles.featureItem}>✓ Fast loading</li>
+            <li style={styles.featureItem}>✓ TypeScript powered</li>
+          </ul>
+        </div>
+
         {/* Install Prompt */}
         {pwaData.isInstallable && (
           <div style={styles.installSection}>
@@ -104,6 +125,25 @@ export default function Home(): JSX.Element {
             </p>
           </div>
         )}
+
+        {/* App Info */}
+        <div style={styles.info}>
+          <h3>App Information</h3>
+          <div style={styles.infoGrid}>
+            <div style={styles.infoItem}>
+              <strong>Version:</strong> 1.0.0
+            </div>
+            <div style={styles.infoItem}>
+              <strong>Built with:</strong> Next.js + TypeScript
+            </div>
+            <div style={styles.infoItem}>
+              <strong>Storage:</strong>{" "}
+              {typeof navigator.storage !== "undefined"
+                ? "Available"
+                : "Not Available"}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Install Prompt Banner */}
