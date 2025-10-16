@@ -1,7 +1,5 @@
-// TypeScript service worker (compiled to JavaScript)
 const CACHE_NAME = "simple-pwa-ts-v1.0.0";
 
-// Assets to cache during installation
 const urlsToCache: string[] = [
   "/",
   "/static/js/bundle.js",
@@ -11,7 +9,6 @@ const urlsToCache: string[] = [
   "/icon-512x512.png",
 ];
 
-// Install event
 self.addEventListener("install", (event: ExtendableEvent) => {
   console.log("Service Worker installing...");
 
@@ -28,18 +25,15 @@ self.addEventListener("install", (event: ExtendableEvent) => {
   );
 });
 
-// Fetch event
 self.addEventListener("fetch", (event: FetchEvent) => {
   event.respondWith(
     caches.match(event.request).then((response: Response | undefined) => {
-      // Return cached version or fetch from network
       if (response) {
         return response;
       }
 
       return fetch(event.request)
         .then((response: Response) => {
-          // Check if we received a valid response
           if (
             !response ||
             response.status !== 200 ||
@@ -48,7 +42,6 @@ self.addEventListener("fetch", (event: FetchEvent) => {
             return response;
           }
 
-          // Clone the response
           const responseToCache = response.clone();
 
           caches.open(CACHE_NAME).then((cache: Cache) => {
@@ -58,7 +51,6 @@ self.addEventListener("fetch", (event: FetchEvent) => {
           return response;
         })
         .catch(() => {
-          // Optional: Return offline page
           return new Response("Network error happened", {
             status: 408,
             headers: { "Content-Type": "text/plain" },
@@ -68,7 +60,6 @@ self.addEventListener("fetch", (event: FetchEvent) => {
   );
 });
 
-// Activate event
 self.addEventListener("activate", (event: ExtendableEvent) => {
   console.log("Service Worker activating...");
 
@@ -85,11 +76,9 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
     })
   );
 
-  // Take control of all clients immediately
   (self as any).clients.claim();
 });
 
-// Message event for communication with the app
 self.addEventListener("message", (event: ExtendableMessageEvent) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     (self as any).skipWaiting();
